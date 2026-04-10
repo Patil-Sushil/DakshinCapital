@@ -169,14 +169,14 @@ const Navbar = () => {
                   }`}
                   whileHover={{ x: 2 }}
                 >
-                  Dakshin
+                  DAKSHIN
                 </motion.span>
                 <span
                   className={`font-semibold text-light-primary dark:text-dark-primary leading-tight transition-all duration-500 ${
                     isScrolled ? 'text-sm' : 'text-base'
                   }`}
                 >
-                  Capital
+                  CAPITAL
                 </span>
               </div>
             </Link>

@@ -1,14 +1,13 @@
-// Admin Login Page
+// Admin Login Page - Professional login matching project theme
 import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Lock, Mail, Eye, EyeOff, LogIn } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, LogIn, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import toast from 'react-hot-toast';
 import { useAuth } from '../../hooks/useAuth';
 import { loginWithEmail } from '../../services/auth.service';
-import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import { toastActions, showError } from '../../utils/toast.jsx';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,18 +31,18 @@ const Login = () => {
 
     try {
       await loginWithEmail(data.email, data.password, data.rememberMe);
-      toast.success('Login successful! Welcome back.');
+      toastActions.loginSuccess();
       navigate('/admin/dashboard');
     } catch (error) {
       console.error('Login error:', error);
-      toast.error(error.message || 'Failed to login. Please check your credentials.');
+      showError(error.message || 'Invalid credentials. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-light-primary via-light-accent to-light-secondary dark:from-dark-primary dark:via-dark-accent dark:to-dark-secondary p-4">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -60,14 +59,19 @@ const Login = () => {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md relative z-10"
       >
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden shadow-2xl">
           {/* Header */}
           <div className="bg-gradient-to-br from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent p-8 text-white text-center">
-            <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: 'spring' }}
+              className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+            >
               <Lock className="w-10 h-10" />
-            </div>
+            </motion.div>
             <h1 className="text-3xl font-heading font-bold mb-2">Admin Login</h1>
-            <p className="text-white/90">Sign in to access the admin dashboard</p>
+            <p className="text-white/90">Dakshin Capital Admin Panel</p>
           </div>
 
           {/* Form */}
@@ -95,14 +99,24 @@ const Login = () => {
                         message: 'Please enter a valid email',
                       },
                     })}
-                    className={`input-field pl-10 ${errors.email ? 'border-red-500' : ''}`}
-                    placeholder="shreyasmalangave056@gmail.com"
+                    className={`w-full pl-10 pr-4 py-3 rounded-lg border ${
+                      errors.email
+                        ? 'border-red-500 focus:ring-red-500'
+                        : 'border-light-border dark:border-dark-border focus:ring-light-primary dark:focus:ring-dark-primary'
+                    } bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring-2 transition-all`}
+                    placeholder="admin@dakshin.com"
                     disabled={isSubmitting}
                     autoComplete="email"
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-1 text-sm text-red-500"
+                  >
+                    {errors.email.message}
+                  </motion.p>
                 )}
               </div>
 
@@ -128,7 +142,11 @@ const Login = () => {
                         message: 'Password must be at least 6 characters',
                       },
                     })}
-                    className={`input-field pl-10 pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                    className={`w-full pl-10 pr-12 py-3 rounded-lg border ${
+                      errors.password
+                        ? 'border-red-500 focus:ring-red-500'
+                        : 'border-light-border dark:border-dark-border focus:ring-light-primary dark:focus:ring-dark-primary'
+                    } bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text focus:outline-none focus:ring-2 transition-all`}
                     placeholder="Enter your password"
                     disabled={isSubmitting}
                     autoComplete="current-password"
@@ -136,71 +154,76 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-light-textSecondary dark:text-dark-textSecondary hover:text-light-text dark:hover:text-dark-text"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-light-textSecondary dark:text-dark-textSecondary hover:text-light-text dark:hover:text-dark-text transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-1 text-sm text-red-500"
+                  >
+                    {errors.password.message}
+                  </motion.p>
                 )}
               </div>
 
               {/* Remember Me */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="rememberMe"
-                    {...register('rememberMe')}
-                    className="h-4 w-4 text-light-primary dark:text-dark-primary focus:ring-light-primary dark:focus:ring-dark-primary border-light-border dark:border-dark-border rounded"
-                    disabled={isSubmitting}
-                  />
-                  <label
-                    htmlFor="rememberMe"
-                    className="ml-2 block text-sm text-light-text dark:text-dark-text"
-                  >
-                    Remember me
-                  </label>
-                </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  {...register('rememberMe')}
+                  className="h-4 w-4 text-light-primary dark:text-dark-primary focus:ring-light-primary dark:focus:ring-dark-primary border-light-border dark:border-dark-border rounded"
+                  disabled={isSubmitting}
+                />
+                <label
+                  htmlFor="rememberMe"
+                  className="ml-2 block text-sm text-light-text dark:text-dark-text"
+                >
+                  Remember me for 30 days
+                </label>
               </div>
 
               {/* Submit Button */}
-              <Button
+              <button
                 type="submit"
-                className="w-full"
-                size="lg"
                 disabled={isSubmitting}
-                loading={isSubmitting}
-                icon={LogIn}
-                iconPosition="right"
+                className="w-full px-6 py-3 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent text-white rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                {isSubmitting ? 'Signing in...' : 'Sign In'}
-              </Button>
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Signing in...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <LogIn className="w-5 h-5" />
+                  </>
+                )}
+              </button>
             </form>
-
-            {/* Info */}
-            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-              <p className="text-sm text-blue-800 dark:text-blue-300">
-                <strong>Demo Credentials:</strong>
-                <br />
-                Email: shreyasmalangave056@gmail.com
-                <br />
-                Password: admin123
-              </p>
-            </div>
           </div>
         </Card>
 
         {/* Back to Home */}
-        <div className="text-center mt-6">
-          <a
-            href="/"
-            className="text-white hover:text-white/80 transition-colors text-sm font-medium"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-center mt-6"
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-white hover:text-white/80 transition-colors text-sm font-medium"
           >
-            ← Back to Homepage
-          </a>
-        </div>
+            <ArrowLeft className="w-4 h-4" />
+            Back to Homepage
+          </Link>
+        </motion.div>
       </motion.div>
     </div>
   );

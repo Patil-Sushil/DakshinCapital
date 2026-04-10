@@ -13,10 +13,10 @@ import {
   MessageSquare,
   CheckCircle2,
 } from 'lucide-react';
-import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LOAN_TYPES, VALIDATION } from '../../utils/constants';
 import { submitEnquiry } from '../../services/enquiry.service';
+import { toastActions, showError } from '../../utils/toast.jsx';
 
 const EnquiryForm = ({ variant = 'full' }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,10 +36,7 @@ const EnquiryForm = ({ variant = 'full' }) => {
       await submitEnquiry(data);
 
       setIsSuccess(true);
-      toast.success(
-        'Thank you! Your enquiry has been submitted successfully. We will contact you soon.',
-        { duration: 5000, icon: '🎉' }
-      );
+      toastActions.enquiryCreated();
 
       reset();
 
@@ -49,9 +46,8 @@ const EnquiryForm = ({ variant = 'full' }) => {
       }, 3000);
     } catch (error) {
       console.error('Error submitting enquiry:', error);
-      toast.error(
-        error.message || 'Failed to submit enquiry. Please try again or contact us directly.',
-        { duration: 5000 }
+      showError(
+        error.message || 'Failed to submit enquiry. Please try again or contact us directly.'
       );
     } finally {
       setIsSubmitting(false);

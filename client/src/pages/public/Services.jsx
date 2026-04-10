@@ -380,18 +380,7 @@ const Services = () => {
         animate={{ scale: 1 }}
         transition={{ delay: 1, type: 'spring' }}
         className="fixed bottom-8 right-8 z-40"
-      >
-        <Link to="/contact">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-14 h-14 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent text-white rounded-full shadow-2xl flex items-center justify-center hover:shadow-3xl transition-shadow"
-            aria-label="Contact us"
-          >
-            <Phone className="w-6 h-6" />
-          </motion.button>
-        </Link>
-      </motion.div>
+      ></motion.div>
     </div>
   );
 };

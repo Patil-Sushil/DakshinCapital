@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, Image as ImageIcon, X } from 'lucide-react';
-import toast from 'react-hot-toast';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
@@ -13,6 +12,8 @@ import {
   updateProject,
   deleteProject,
 } from '../../services/project.service';
+import { showSuccess, showError, toastActions } from '../../utils/toast.jsx';
+import { confirmDelete } from '../../utils/confirm';
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -38,7 +39,7 @@ const ProjectsPage = () => {
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {
-      toast.error('Failed to load projects');
+      showError('Failed to load projects');
     } finally {
       setLoading(false);
     }
@@ -61,23 +62,23 @@ const ProjectsPage = () => {
     e.preventDefault();
 
     if (!formData.title || !formData.description) {
-      toast.error('Please fill all required fields');
+      showError('Please fill all required fields');
       return;
     }
 
     try {
       if (editingProject) {
         await updateProject(editingProject.id, formData, selectedImages);
-        toast.success('Project updated successfully');
+        toastActions.projectUpdated();
       } else {
         await createProject(formData, selectedImages);
-        toast.success('Project created successfully');
+        toastActions.projectCreated();
       }
 
       resetForm();
       loadProjects();
     } catch (error) {
-      toast.error('Failed to save project');
+      showError('Failed to save project');
     }
   };
 
@@ -95,14 +96,15 @@ const ProjectsPage = () => {
   };
 
   const handleDelete = async (project) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
+    const confirmed = await confirmDelete('this project');
+    if (!confirmed) return;
 
     try {
       await deleteProject(project.id, project.galleryImages);
       setProjects((prev) => prev.filter((p) => p.id !== project.id));
-      toast.success('Project deleted successfully');
+      toastActions.projectDeleted();
     } catch (error) {
-      toast.error('Failed to delete project');
+      showError('Failed to delete project');
     }
   };
 

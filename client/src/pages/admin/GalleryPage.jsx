@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, Trash2, Edit, Check, X } from 'lucide-react';
-import toast from 'react-hot-toast';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
@@ -15,6 +14,8 @@ import {
   bulkDeleteImages,
   bulkUpdateCategory,
 } from '../../services/gallery.service';
+import { showSuccess, showError, toastActions } from '../../utils/toast.jsx';
+import { confirmDelete } from '../../utils/confirm';
 
 const GalleryPage = () => {
   const [images, setImages] = useState([]);
@@ -40,7 +41,7 @@ const GalleryPage = () => {
       const data = await fetchGalleryImages();
       setImages(data);
     } catch (error) {
-      toast.error('Failed to load images');
+      showError('Failed to load images');
     } finally {
       setLoading(false);
     }
@@ -52,19 +53,19 @@ const GalleryPage = () => {
 
   const handleUpload = async () => {
     if (uploadFiles.length === 0) {
-      toast.error('Please select images to upload');
+      showError('Please select images to upload');
       return;
     }
 
     try {
       await Promise.all(uploadFiles.map((file) => addGalleryImage(file, uploadMetadata)));
-      toast.success(`${uploadFiles.length} image(s) uploaded successfully`);
+      toastActions.imagesUploaded(uploadFiles.length);
       setUploadFiles([]);
       setUploadMetadata({ title: '', description: '', category: 'residential' });
       setShowUploadModal(false);
       loadImages();
     } catch (error) {
-      toast.error('Failed to upload images');
+      showError('Failed to upload images');
     }
   };
 
@@ -81,24 +82,25 @@ const GalleryPage = () => {
   const handleUpdate = async () => {
     try {
       await updateGalleryImage(editingImage.id, uploadMetadata);
-      toast.success('Image updated successfully');
+      toastActions.updated();
       setShowEditModal(false);
       setEditingImage(null);
       loadImages();
     } catch (error) {
-      toast.error('Failed to update image');
+      showError('Failed to update image');
     }
   };
 
   const handleDelete = async (image) => {
-    if (!confirm('Are you sure you want to delete this image?')) return;
+    const confirmed = await confirmDelete('this image');
+    if (!confirmed) return;
 
     try {
       await deleteGalleryImageById(image.id, image.imageUrl);
       setImages((prev) => prev.filter((img) => img.id !== image.id));
-      toast.success('Image deleted successfully');
+      toastActions.imageDeleted();
     } catch (error) {
-      toast.error('Failed to delete image');
+      showError('Failed to delete image');
     }
   };
 
@@ -110,16 +112,18 @@ const GalleryPage = () => {
 
   const handleBulkDelete = async () => {
     if (selectedImages.length === 0) return;
-    if (!confirm(`Delete ${selectedImages.length} selected image(s)?`)) return;
+
+    const confirmed = await confirmDelete(`${selectedImages.length} selected image(s)`);
+    if (!confirmed) return;
 
     try {
       const imagesToDelete = images.filter((img) => selectedImages.includes(img.id));
       await bulkDeleteImages(imagesToDelete);
       setImages((prev) => prev.filter((img) => !selectedImages.includes(img.id)));
       setSelectedImages([]);
-      toast.success('Images deleted successfully');
+      toastActions.deleted();
     } catch (error) {
-      toast.error('Failed to delete images');
+      showError('Failed to delete images');
     }
   };
 
@@ -128,11 +132,11 @@ const GalleryPage = () => {
 
     try {
       await bulkUpdateCategory(selectedImages, category);
-      toast.success('Category updated successfully');
+      toastActions.updated();
       setSelectedImages([]);
       loadImages();
     } catch (error) {
-      toast.error('Failed to update category');
+      showError('Failed to update category');
     }
   };
 
