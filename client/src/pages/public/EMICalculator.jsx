@@ -34,45 +34,6 @@ const EMICalculatorPage = () => {
         breadcrumbs={[{ label: 'EMI Calculator' }]}
       />
 
-      {/* Info Section */}
-      <section className="section-padding bg-light-surface dark:bg-dark-surface">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto"
-          >
-            <Card>
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Info className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-heading font-semibold text-light-text dark:text-dark-text mb-2">
-                    What is EMI?
-                  </h2>
-                  <p className="text-light-textSecondary dark:text-dark-textSecondary leading-relaxed mb-4">
-                    EMI (Equated Monthly Installment) is the fixed amount you pay every month to
-                    repay your loan. It includes both the principal amount and the interest charged
-                    on the loan. Use our calculator to find out your monthly EMI and plan your
-                    finances better.
-                  </p>
-                  <div className="bg-light-background dark:bg-dark-background rounded-lg p-4 border border-light-border dark:border-dark-border">
-                    <p className="text-sm font-mono text-light-text dark:text-dark-text">
-                      <strong>Formula:</strong> EMI = [P × R × (1+R)^N] / [(1+R)^N-1]
-                    </p>
-                    <p className="text-xs text-light-textSecondary dark:text-dark-textSecondary mt-2">
-                      Where P = Principal, R = Monthly Interest Rate, N = Tenure in Months
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Features */}
       <section className="py-12 bg-light-background dark:bg-dark-background">
         <div className="container-custom">
