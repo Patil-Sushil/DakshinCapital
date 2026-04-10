@@ -26,6 +26,9 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const root = window.document.documentElement;
 
+    // Add transition class for smooth theme change
+    root.classList.add('theme-transition-active');
+
     // Remove both classes first
     root.classList.remove('light', 'dark');
 
@@ -40,6 +43,13 @@ export const ThemeProvider = ({ children }) => {
     if (metaThemeColor) {
       metaThemeColor.setAttribute('content', theme === 'dark' ? '#0A0F1E' : '#FFFFFF');
     }
+
+    // Remove transition class after animation completes
+    const timer = setTimeout(() => {
+      root.classList.remove('theme-transition-active');
+    }, 400);
+
+    return () => clearTimeout(timer);
   }, [theme]);
 
   // Listen for system theme changes

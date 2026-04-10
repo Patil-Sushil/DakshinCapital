@@ -1,5 +1,6 @@
-// Services Page - Dakshin Capital Loan Services
-import PageHeader from '../../components/common/PageHeader';
+// Services Page - Professional Design matching EMI Calculator structure
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
   Building2,
   Building,
@@ -14,12 +15,14 @@ import {
   FileCheck,
   Zap,
   Users,
+  TrendingUp,
+  Award,
+  Target,
+  Phone,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import PageHeader from '../../components/common/PageHeader';
 import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import { LOAN_TYPES, KEY_FEATURES } from '../../utils/constants';
+import { KEY_FEATURES } from '../../utils/constants';
 
 const Services = () => {
   const loanServices = [
@@ -128,6 +131,29 @@ const Services = () => {
     },
   ];
 
+  const statistics = [
+    {
+      icon: Users,
+      value: '500+',
+      label: 'Happy Clients',
+    },
+    {
+      icon: TrendingUp,
+      value: '250+',
+      label: 'Loans Disbursed',
+    },
+    {
+      icon: Award,
+      value: '100Cr+',
+      label: 'Funded',
+    },
+    {
+      icon: Target,
+      value: '98%',
+      label: 'Success Rate',
+    },
+  ];
+
   const iconMap = {
     Building2,
     Shield,
@@ -147,11 +173,42 @@ const Services = () => {
         breadcrumbs={[{ label: 'Services' }]}
       />
 
+      {/* Statistics */}
+      <section className="py-12 bg-light-background dark:bg-dark-background">
+        <div className="container-custom">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {statistics.map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card hover className="text-center h-full">
+                    <div className="w-14 h-14 bg-light-primary/10 dark:bg-dark-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-7 h-7 text-light-primary dark:text-dark-primary" />
+                    </div>
+                    <div className="text-2xl md:text-3xl font-bold text-light-text dark:text-dark-text mb-1">
+                      {stat.value}
+                    </div>
+                    <p className="text-sm text-light-textSecondary dark:text-dark-textSecondary">
+                      {stat.label}
+                    </p>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Loan Services Grid */}
       <section className="section-padding bg-light-background dark:bg-dark-background">
         <div className="container-custom">
           <div className="space-y-12">
-            {loanServices.map((loan, index) => {
+            {loanServices.map((loan) => {
               const Icon = loan.icon;
               return (
                 <motion.div
@@ -212,23 +269,16 @@ const Services = () => {
                           </p>
                         </div>
                         <div className="space-y-3">
-                          <Link to="/contact">
-                            <Button
-                              variant="outline"
-                              className="w-full bg-white text-light-primary hover:bg-white/90 border-white"
-                              icon={ArrowRight}
-                              iconPosition="right"
-                            >
-                              Apply Now
-                            </Button>
+                          <Link to="/contact" className="block">
+                            <button className="w-full px-6 py-3 bg-white text-light-primary dark:text-dark-primary font-semibold rounded-lg hover:bg-white/90 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group">
+                              <span>Apply Now</span>
+                              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </button>
                           </Link>
-                          <Link to="/emi-calculator">
-                            <Button
-                              variant="outline"
-                              className="w-full border-white text-white hover:bg-white/10"
-                            >
+                          <Link to="/emi-calculator" className="block">
+                            <button className="w-full px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-light-primary dark:hover:text-dark-primary transition-all duration-300">
                               Calculate EMI
-                            </Button>
+                            </button>
                           </Link>
                         </div>
                       </div>
@@ -270,10 +320,10 @@ const Services = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                  <Card hover className="h-full">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-light-primary/10 dark:bg-dark-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <Icon className="w-8 h-8 text-light-primary dark:text-dark-primary" />
+                      <div className="w-16 h-16 md:w-14 md:h-14 bg-light-primary/10 dark:bg-dark-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Icon className="w-8 h-8 md:w-7 md:h-7 text-light-primary dark:text-dark-primary" />
                       </div>
                       <h3 className="text-lg font-semibold text-light-text dark:text-dark-text mb-2">
                         {feature.title}
@@ -309,29 +359,39 @@ const Services = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="bg-white text-light-primary hover:bg-white/90 border-white"
-                  icon={ArrowRight}
-                  iconPosition="right"
-                >
-                  Get in Touch
-                </Button>
+                <button className="px-8 py-4 bg-white text-light-primary dark:text-dark-primary font-semibold rounded-lg hover:bg-white/90 hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2 group">
+                  <span>Get in Touch</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
               </Link>
               <Link to="/emi-calculator">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white text-white hover:bg-white/10"
-                >
+                <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-light-primary dark:hover:text-dark-primary hover:shadow-xl hover:scale-105 transition-all duration-300">
                   Calculate Your EMI
-                </Button>
+                </button>
               </Link>
             </div>
           </motion.div>
         </div>
       </section>
+
+      {/* Floating Action Button */}
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 1, type: 'spring' }}
+        className="fixed bottom-8 right-8 z-40"
+      >
+        <Link to="/contact">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-14 h-14 bg-gradient-to-r from-light-primary to-light-accent dark:from-dark-primary dark:to-dark-accent text-white rounded-full shadow-2xl flex items-center justify-center hover:shadow-3xl transition-shadow"
+            aria-label="Contact us"
+          >
+            <Phone className="w-6 h-6" />
+          </motion.button>
+        </Link>
+      </motion.div>
     </div>
   );
 };

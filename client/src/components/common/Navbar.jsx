@@ -282,7 +282,6 @@ const Navbar = () => {
             {/* Right Side Actions */}
             <div className="flex items-center space-x-3 lg:space-x-4">
               <ThemeToggle />
-
               {/* CTA Button - Desktop */}
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -294,11 +293,7 @@ const Navbar = () => {
                   className="relative inline-flex items-center justify-center px-6 py-2.5 overflow-hidden font-semibold text-white transition-all duration-300 bg-gradient-to-r from-light-primary via-light-accent to-light-secondary dark:from-dark-primary dark:via-dark-accent dark:to-dark-secondary rounded-lg shadow-lg group hover:shadow-xl"
                 >
                   <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-light-accent to-light-primary dark:from-dark-accent dark:to-dark-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <span className="relative flex items-center gap-2">
-                    <Sparkles className="w-4 h-4" />
-                    Apply Now
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </span>
+                  <span className="relative flex items-center gap-2">Apply Now</span>
                 </Link>
               </motion.div>
 
