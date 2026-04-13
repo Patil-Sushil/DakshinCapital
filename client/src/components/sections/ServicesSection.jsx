@@ -1,12 +1,11 @@
 // ServicesSection.jsx
 import { Link } from 'react-router-dom';
 import {
+  Building2,
+  Building,
   Home,
-  User,
-  Briefcase,
-  Car,
-  GraduationCap,
-  Gem,
+  FileText,
+  Settings,
   ArrowRight,
   Sparkles,
   LayoutGrid,
@@ -19,12 +18,12 @@ const ServicesSection = () => {
 
   const services = [
     {
-      icon: Home,
-      title: 'Home Loan',
+      icon: Building2,
+      title: 'Construction & Builder Finance',
       description:
-        'Make your dream home a reality with our affordable home loan solutions and flexible repayment options.',
-      rate: '8.5% – 9.5%',
-      tag: 'Most Popular',
+        'Structured project funding for residential, commercial, or redevelopment projects with phased disbursement planning.',
+      rate: '9% – 12%',
+      tag: 'Project Based',
       iconColor: 'text-blue-400',
       tagColor: isDark
         ? 'bg-blue-500/15 text-blue-300 border-blue-500/30'
@@ -35,12 +34,28 @@ const ServicesSection = () => {
       barColor: 'from-blue-400 to-blue-600',
     },
     {
-      icon: User,
-      title: 'Personal Loan',
+      icon: Building,
+      title: 'Corporate & SME Loans',
       description:
-        'Quick personal loans for all your immediate financial needs with minimal documentation.',
-      rate: '10.5% – 15%',
-      tag: 'Fast Disbursal',
+        'Working capital, expansion funding, or term loans for manufacturing units, trading businesses, and service providers.',
+      rate: '9.5% – 13%',
+      tag: 'Business Growth',
+      iconColor: 'text-purple-400',
+      tagColor: isDark
+        ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+        : 'bg-purple-50 text-purple-700 border-purple-200',
+      bgIcon: isDark ? 'bg-purple-500/15 border-purple-500/25' : 'bg-purple-50 border-purple-200',
+      rateColor: isDark ? 'text-purple-400' : 'text-purple-700',
+      glowHover: isDark ? 'group-hover:shadow-purple-500/15' : 'group-hover:shadow-purple-200/60',
+      barColor: 'from-purple-400 to-purple-600',
+    },
+    {
+      icon: Home,
+      title: 'Loan Against Property',
+      description:
+        'Secured loans against residential or commercial property for business expansion, debt consolidation, or investments.',
+      rate: '8.5% – 11%',
+      tag: 'Secured Loan',
       iconColor: 'text-emerald-400',
       tagColor: isDark
         ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
@@ -53,28 +68,28 @@ const ServicesSection = () => {
       barColor: 'from-emerald-400 to-emerald-600',
     },
     {
-      icon: Briefcase,
-      title: 'Business Loan',
+      icon: Home,
+      title: 'Home & Property Purchase',
       description:
-        'Fuel your business growth with flexible business financing options tailored to your needs.',
-      rate: '9% – 12%',
-      tag: 'High Limit',
-      iconColor: 'text-violet-400',
+        'Finance for new purchase, resale, or joint development including structured deals for developers and end-users.',
+      rate: '8.5% – 10%',
+      tag: 'Most Popular',
+      iconColor: 'text-orange-400',
       tagColor: isDark
-        ? 'bg-violet-500/15 text-violet-300 border-violet-500/30'
-        : 'bg-violet-50 text-violet-700 border-violet-200',
-      bgIcon: isDark ? 'bg-violet-500/15 border-violet-500/25' : 'bg-violet-50 border-violet-200',
-      rateColor: isDark ? 'text-violet-400' : 'text-violet-700',
-      glowHover: isDark ? 'group-hover:shadow-violet-500/15' : 'group-hover:shadow-violet-200/60',
-      barColor: 'from-violet-400 to-violet-600',
+        ? 'bg-orange-500/15 text-orange-300 border-orange-500/30'
+        : 'bg-orange-50 text-orange-700 border-orange-200',
+      bgIcon: isDark ? 'bg-orange-500/15 border-orange-500/25' : 'bg-orange-50 border-orange-200',
+      rateColor: isDark ? 'text-orange-400' : 'text-orange-700',
+      glowHover: isDark ? 'group-hover:shadow-orange-500/15' : 'group-hover:shadow-orange-200/60',
+      barColor: 'from-orange-400 to-orange-600',
     },
     {
-      icon: Car,
-      title: 'Car Loan',
+      icon: FileText,
+      title: 'Lease Rental Discounting',
       description:
-        'Drive your dream car home with our easy car loan schemes and competitive rates.',
-      rate: '8.75% – 10%',
-      tag: 'Quick Process',
+        'Funding against rental income for cash flow enhancement and working capital optimization with flexible terms.',
+      rate: '9% – 11.5%',
+      tag: 'Cash Flow',
       iconColor: 'text-rose-400',
       tagColor: isDark
         ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
@@ -85,12 +100,12 @@ const ServicesSection = () => {
       barColor: 'from-rose-400 to-rose-600',
     },
     {
-      icon: GraduationCap,
-      title: 'Education Loan',
+      icon: Settings,
+      title: 'Machinery Loans',
       description:
-        'Invest in your future with our comprehensive education loan plans for top institutions.',
-      rate: '9.5% – 11.5%',
-      tag: 'Low Rate',
+        'Funding for machinery assets and working capital optimization to scale your operations and enhance productivity.',
+      rate: '9.5% – 12%',
+      tag: 'Asset Finance',
       iconColor: 'text-amber-400',
       tagColor: isDark
         ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
@@ -99,22 +114,6 @@ const ServicesSection = () => {
       rateColor: isDark ? 'text-amber-400' : 'text-amber-700',
       glowHover: isDark ? 'group-hover:shadow-amber-500/15' : 'group-hover:shadow-amber-200/60',
       barColor: 'from-amber-400 to-amber-600',
-    },
-    {
-      icon: Gem,
-      title: 'Gold Loan',
-      description:
-        'Get instant loans against your gold assets with minimal documentation and fast approval.',
-      rate: '7.5% – 9%',
-      tag: 'Instant Cash',
-      iconColor: 'text-yellow-400',
-      tagColor: isDark
-        ? 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30'
-        : 'bg-yellow-50 text-yellow-700 border-yellow-200',
-      bgIcon: isDark ? 'bg-yellow-500/15 border-yellow-500/25' : 'bg-yellow-50 border-yellow-200',
-      rateColor: isDark ? 'text-yellow-400' : 'text-yellow-700',
-      glowHover: isDark ? 'group-hover:shadow-yellow-500/15' : 'group-hover:shadow-yellow-200/60',
-      barColor: 'from-yellow-400 to-yellow-500',
     },
   ];
 
@@ -223,7 +222,7 @@ const ServicesSection = () => {
                   }
                 `}
               >
-                Loan Services
+                Financial Services
               </span>
               <motion.span
                 className={`
@@ -249,8 +248,8 @@ const ServicesSection = () => {
               ${isDark ? 'text-slate-400' : 'text-slate-500'}
             `}
           >
-            Comprehensive loan solutions tailored to meet your diverse financial requirements —
-            backed by years of expertise and trust.
+            Comprehensive loan solutions backed by nationalized banks and tailored to meet your
+            diverse financial requirements — powered by years of expertise and trust.
           </motion.p>
         </motion.div>
 
