@@ -29,7 +29,7 @@ const GalleryPage = () => {
   const [uploadMetadata, setUploadMetadata] = useState({
     title: '',
     description: '',
-    category: 'residential',
+    category: 'team',
   });
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const GalleryPage = () => {
       await Promise.all(uploadFiles.map((file) => addGalleryImage(file, uploadMetadata)));
       toastActions.imagesUploaded(uploadFiles.length);
       setUploadFiles([]);
-      setUploadMetadata({ title: '', description: '', category: 'residential' });
+      setUploadMetadata({ title: '', description: '', category: 'team' });
       setShowUploadModal(false);
       loadImages();
     } catch (error) {
@@ -171,9 +171,11 @@ const GalleryPage = () => {
             className="px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg"
           >
             <option value="all">All Categories</option>
-            <option value="residential">Residential</option>
-            <option value="commercial">Commercial</option>
-            <option value="industrial">Industrial</option>
+            <option value="team">Team</option>
+            <option value="office">Office & Team</option>
+            <option value="client-success">Client Success</option>
+            <option value="events">Events</option>
+            <option value="awards">Awards</option>
             <option value="uncategorized">Uncategorized</option>
           </select>
 
@@ -194,9 +196,11 @@ const GalleryPage = () => {
                 className="px-3 py-1 text-sm bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg"
               >
                 <option value="">Change Category</option>
-                <option value="residential">Residential</option>
-                <option value="commercial">Commercial</option>
-                <option value="industrial">Industrial</option>
+                <option value="team">Team</option>
+                <option value="office">Office & Team</option>
+                <option value="client-success">Client Success</option>
+                <option value="events">Events</option>
+                <option value="awards">Awards</option>
               </select>
             </>
           )}
@@ -301,9 +305,11 @@ const GalleryPage = () => {
               onChange={(e) => setUploadMetadata({ ...uploadMetadata, category: e.target.value })}
               className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg"
             >
-              <option value="residential">Residential</option>
-              <option value="commercial">Commercial</option>
-              <option value="industrial">Industrial</option>
+              <option value="team">Team</option>
+              <option value="office">Office & Team</option>
+              <option value="client-success">Client Success</option>
+              <option value="events">Events</option>
+              <option value="awards">Awards</option>
               <option value="uncategorized">Uncategorized</option>
             </select>
           </div>
@@ -359,9 +365,11 @@ const GalleryPage = () => {
               onChange={(e) => setUploadMetadata({ ...uploadMetadata, category: e.target.value })}
               className="w-full px-4 py-2 bg-light-surface dark:bg-dark-surface border border-light-border dark:border-dark-border rounded-lg"
             >
-              <option value="residential">Residential</option>
-              <option value="commercial">Commercial</option>
-              <option value="industrial">Industrial</option>
+              <option value="team">Team</option>
+              <option value="office">Office & Team</option>
+              <option value="client-success">Client Success</option>
+              <option value="events">Events</option>
+              <option value="awards">Awards</option>
               <option value="uncategorized">Uncategorized</option>
             </select>
           </div>

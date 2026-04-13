@@ -3,10 +3,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, Mail, FolderOpen, Image, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../services/firebase';
 import Card from '../../components/ui/Card';
 import Badge from '../../components/ui/Badge';
+import { PageLoader } from '../../components/common/Loader';
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState([
     {
       title: 'Total Enquiries',
@@ -46,6 +50,75 @@ const Dashboard = () => {
     },
   ]);
 
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      // Fetch enquiries
+      const enquiriesSnapshot = await getDocs(collection(db, 'enquiries'));
+      const totalEnquiries = enquiriesSnapshot.size;
+
+      // Count pending enquiries (status = 'new')
+      const pendingQuery = query(collection(db, 'enquiries'), where('status', '==', 'new'));
+      const pendingSnapshot = await getDocs(pendingQuery);
+      const pendingCount = pendingSnapshot.size;
+
+      // Fetch projects
+      const projectsSnapshot = await getDocs(collection(db, 'projects'));
+      const totalProjects = projectsSnapshot.size;
+
+      // Fetch gallery images
+      const gallerySnapshot = await getDocs(collection(db, 'gallery'));
+      const totalGallery = gallerySnapshot.size;
+
+      // Update stats
+      setStats([
+        {
+          title: 'Total Enquiries',
+          value: totalEnquiries.toString(),
+          change: `${totalEnquiries} total`,
+          trend: 'up',
+          icon: Mail,
+          color: 'text-blue-600 dark:text-blue-400',
+          bgColor: 'bg-blue-600/10',
+        },
+        {
+          title: 'Pending',
+          value: pendingCount.toString(),
+          change: `${pendingCount} new`,
+          trend: pendingCount > 0 ? 'up' : 'neutral',
+          icon: Clock,
+          color: 'text-orange-600 dark:text-orange-400',
+          bgColor: 'bg-orange-600/10',
+        },
+        {
+          title: 'Projects',
+          value: totalProjects.toString(),
+          change: `${totalProjects} total`,
+          trend: 'up',
+          icon: FolderOpen,
+          color: 'text-green-600 dark:text-green-400',
+          bgColor: 'bg-green-600/10',
+        },
+        {
+          title: 'Gallery Images',
+          value: totalGallery.toString(),
+          change: `${totalGallery} total`,
+          trend: 'up',
+          icon: Image,
+          color: 'text-purple-600 dark:text-purple-400',
+          bgColor: 'bg-purple-600/10',
+        },
+      ]);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const quickActions = [
     {
       title: 'View Enquiries',
@@ -69,6 +142,8 @@ const Dashboard = () => {
       link: '/admin/gallery',
     },
   ];
+
+  if (loading) return <PageLoader />;
 
   return (
     <div className="space-y-6 md:space-y-8">

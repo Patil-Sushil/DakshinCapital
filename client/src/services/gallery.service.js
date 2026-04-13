@@ -35,11 +35,26 @@ export const uploadGalleryImage = async (file) => {
  */
 export const deleteGalleryImage = async (imageUrl) => {
   try {
-    const imageRef = ref(storage, imageUrl);
-    await deleteObject(imageRef);
+    // Extract the path from the full URL
+    // URL format: https://firebasestorage.googleapis.com/v0/b/[bucket]/o/[path]?token=[token]
+    const decodedUrl = decodeURIComponent(imageUrl);
+    const pathMatch = decodedUrl.match(/\/o\/(.+?)\?/);
+
+    if (pathMatch && pathMatch[1]) {
+      const imagePath = pathMatch[1];
+      const imageRef = ref(storage, imagePath);
+      await deleteObject(imageRef);
+    } else {
+      // Fallback: try using the URL directly
+      const imageRef = ref(storage, imageUrl);
+      await deleteObject(imageRef);
+    }
   } catch (error) {
     console.error('Error deleting image:', error);
-    throw error;
+    // Don't throw error if image doesn't exist in storage
+    if (error.code !== 'storage/object-not-found') {
+      throw error;
+    }
   }
 };
 
