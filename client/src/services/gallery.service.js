@@ -115,10 +115,26 @@ export const updateGalleryImage = async (id, metadata) => {
  */
 export const deleteGalleryImageById = async (id, imageUrl) => {
   try {
+    // Try to delete from storage first
     await deleteGalleryImage(imageUrl);
+    // Then delete from Firestore
     await deleteDoc(doc(db, 'gallery', id));
   } catch (error) {
     console.error('Error deleting gallery image:', error);
+
+    // If storage deletion fails due to permissions, still delete from Firestore
+    if (error.code === 'storage/unauthorized') {
+      console.warn('Storage deletion failed due to permissions, deleting Firestore record only');
+      try {
+        await deleteDoc(doc(db, 'gallery', id));
+        // Throw a custom error with helpful message
+        throw new Error(
+          'Image record deleted, but file remains in storage. Please update Firebase Storage rules to allow deletion.'
+        );
+      } catch (firestoreError) {
+        throw new Error('Failed to delete image. Please check Firebase Storage rules.');
+      }
+    }
     throw error;
   }
 };

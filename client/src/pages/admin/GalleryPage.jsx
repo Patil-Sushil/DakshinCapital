@@ -100,7 +100,14 @@ const GalleryPage = () => {
       setImages((prev) => prev.filter((img) => img.id !== image.id));
       toastActions.imageDeleted();
     } catch (error) {
-      showError('Failed to delete image');
+      console.error('Delete error:', error);
+      if (error.message && error.message.includes('Firebase Storage rules')) {
+        showError(
+          'Permission denied. Please update Firebase Storage rules to allow deletion. Check FIREBASE_STORAGE_RULES_SETUP.md for instructions.'
+        );
+      } else {
+        showError('Failed to delete image. Please check Firebase Storage permissions.');
+      }
     }
   };
 
