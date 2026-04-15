@@ -15,7 +15,6 @@ import {
   Calendar,
   Search,
   X,
-  Download,
   Share2,
   Eye,
   Heart,
@@ -24,6 +23,7 @@ import PageHeader from '../../components/common/PageHeader';
 import { PageLoader } from '../../components/common/Loader';
 import Card from '../../components/ui/Card';
 import { fetchGalleryImages } from '../../services/gallery.service';
+import { showError, showInfo, showSuccess } from '../../utils/toast';
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -56,11 +56,6 @@ const Gallery = () => {
     return count;
   };
 
-  const totalImages = useCounter(images.length);
-  const happyMoments = useCounter(Math.floor(images.length * 0.6));
-  const teamMembers = useCounter(50);
-  const yearsDocumented = useCounter(5);
-
   useEffect(() => {
     loadImages();
   }, []);
@@ -68,137 +63,14 @@ const Gallery = () => {
   const loadImages = async () => {
     try {
       const data = await fetchGalleryImages();
-      setImages(data.length > 0 ? data : getMockImages());
+      setImages(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error loading images:', error);
-      setImages(getMockImages());
+      setImages([]);
     } finally {
       setLoading(false);
     }
   };
-
-  const getMockImages = () => [
-    {
-      id: '1',
-      imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800',
-      title: 'Modern Office Space',
-      category: 'office',
-      date: '2024-01-15',
-      views: 1234,
-      likes: 89,
-      height: 'tall', // tall, medium, short
-    },
-    {
-      id: '2',
-      imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
-      title: 'Team Collaboration',
-      category: 'team',
-      date: '2024-01-10',
-      views: 2156,
-      likes: 145,
-      height: 'medium',
-    },
-    {
-      id: '3',
-      imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800',
-      title: 'Client Success Story',
-      category: 'clients',
-      date: '2024-01-05',
-      views: 987,
-      likes: 67,
-      height: 'short',
-    },
-    {
-      id: '4',
-      imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800',
-      title: 'Office Interior',
-      category: 'office',
-      date: '2023-12-20',
-      views: 1543,
-      likes: 98,
-      height: 'medium',
-    },
-    {
-      id: '5',
-      imageUrl: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800',
-      title: 'Award Ceremony',
-      category: 'awards',
-      date: '2023-12-15',
-      views: 3421,
-      likes: 234,
-      height: 'tall',
-    },
-    {
-      id: '6',
-      imageUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800',
-      title: 'Financial Workshop',
-      category: 'events',
-      date: '2023-12-01',
-      views: 2876,
-      likes: 187,
-      height: 'medium',
-    },
-    {
-      id: '7',
-      imageUrl: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800',
-      title: 'Happy Client',
-      category: 'clients',
-      date: '2023-11-20',
-      views: 1654,
-      likes: 112,
-      height: 'short',
-    },
-    {
-      id: '8',
-      imageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
-      title: 'Team Building Event',
-      category: 'team',
-      date: '2023-11-10',
-      views: 2234,
-      likes: 156,
-      height: 'tall',
-    },
-    {
-      id: '9',
-      imageUrl: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=800',
-      title: 'Corporate Meeting',
-      category: 'office',
-      date: '2023-11-05',
-      views: 1876,
-      likes: 134,
-      height: 'medium',
-    },
-    {
-      id: '10',
-      imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
-      title: 'Success Celebration',
-      category: 'events',
-      date: '2023-10-25',
-      views: 3102,
-      likes: 221,
-      height: 'short',
-    },
-    {
-      id: '11',
-      imageUrl: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800',
-      title: 'Client Handover',
-      category: 'clients',
-      date: '2023-10-15',
-      views: 1432,
-      likes: 95,
-      height: 'tall',
-    },
-    {
-      id: '12',
-      imageUrl: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800',
-      title: 'Recognition Award',
-      category: 'awards',
-      date: '2023-10-01',
-      views: 2654,
-      likes: 189,
-      height: 'medium',
-    },
-  ];
 
   const categories = [
     { id: 'all', label: 'All', icon: ImageIcon, color: 'from-blue-500 to-blue-600' },
@@ -208,6 +80,26 @@ const Gallery = () => {
     { id: 'awards', label: 'Awards', icon: Award, color: 'from-yellow-500 to-yellow-600' },
     { id: 'team', label: 'Team', icon: Users, color: 'from-pink-500 to-pink-600' },
   ];
+
+  // Filter images by category and search
+  const filteredImages = images.filter((img) => {
+    const matchesCategory = categoryFilter === 'all' || img.category === categoryFilter;
+    const matchesSearch =
+      searchQuery === '' ||
+      (img.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (img.category || '').toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const filteredTotalViews = filteredImages.reduce((sum, img) => sum + (img.views || 0), 0);
+  const filteredTotalLikes = filteredImages.reduce((sum, img) => sum + (img.likes || 0), 0);
+  const filteredCategoryCount = new Set(filteredImages.map((img) => img.category).filter(Boolean))
+    .size;
+
+  const totalImages = useCounter(filteredImages.length);
+  const totalViews = useCounter(filteredTotalViews);
+  const totalLikes = useCounter(filteredTotalLikes);
+  const categoryCount = useCounter(filteredCategoryCount);
 
   const statistics = [
     {
@@ -219,40 +111,93 @@ const Gallery = () => {
     },
     {
       icon: Calendar,
-      value: happyMoments,
+      value: totalViews,
       suffix: '+',
-      label: 'Happy Moments',
+      label: 'Total Views',
       color: 'from-purple-500 to-purple-600',
     },
     {
       icon: Users,
-      value: teamMembers,
+      value: totalLikes,
       suffix: '+',
-      label: 'Team Members',
+      label: 'Total Likes',
       color: 'from-green-500 to-green-600',
     },
     {
       icon: Award,
-      value: yearsDocumented,
+      value: categoryCount,
       suffix: '+',
-      label: 'Years Documented',
+      label: 'Categories',
       color: 'from-orange-500 to-orange-600',
     },
   ];
 
-  // Filter images by category and search
-  const filteredImages = images.filter((img) => {
-    const matchesCategory = categoryFilter === 'all' || img.category === categoryFilter;
-    const matchesSearch =
-      searchQuery === '' ||
-      img.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      img.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
   const openLightbox = (index) => {
     setCurrentIndex(index);
     setLightboxOpen(true);
+  };
+
+  const handleViewImage = (index, imageId) => {
+    setImages((prevImages) =>
+      prevImages.map((img) =>
+        img.id === imageId
+          ? {
+              ...img,
+              views: (img.views || 0) + 1,
+            }
+          : img
+      )
+    );
+    openLightbox(index);
+  };
+
+  const handleToggleLike = (imageId) => {
+    setImages((prevImages) =>
+      prevImages.map((img) => {
+        if (img.id !== imageId) return img;
+
+        const isLiked = Boolean(img.isLiked);
+        return {
+          ...img,
+          isLiked: !isLiked,
+          likes: Math.max(0, (img.likes || 0) + (isLiked ? -1 : 1)),
+        };
+      })
+    );
+  };
+
+  const handleShareImage = async (image) => {
+    const title = image?.title || 'Gallery Image';
+    const url = image?.imageUrl;
+
+    if (!url) {
+      showError('Image link is not available to share.');
+      return;
+    }
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title,
+          text: `Check this image from our gallery: ${title}`,
+          url,
+        });
+        showSuccess('Image shared successfully.');
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        showInfo('Image link copied to clipboard.');
+        return;
+      }
+
+      showError('Sharing is not supported on this browser.');
+    } catch (error) {
+      if (error?.name !== 'AbortError') {
+        showError('Unable to share image right now.');
+      }
+    }
   };
 
   const getCategoryCount = (categoryId) => {
@@ -436,7 +381,7 @@ const Gallery = () => {
                     >
                       <div
                         className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500"
-                        onClick={() => openLightbox(index)}
+                        onClick={() => handleViewImage(index, image.id)}
                       >
                         {/* Image */}
                         <div className={`relative ${getHeightClass(image.height)} overflow-hidden`}>
@@ -485,17 +430,29 @@ const Gallery = () => {
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  // Handle download
+                                  handleViewImage(index, image.id);
                                 }}
                                 className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg transition-colors"
-                                aria-label="Download image"
+                                aria-label="View image"
                               >
-                                <Download className="w-4 h-4 text-white" />
+                                <Eye className="w-4 h-4 text-white" />
                               </button>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  // Handle share
+                                  handleToggleLike(image.id);
+                                }}
+                                className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg transition-colors"
+                                aria-label="Like image"
+                              >
+                                <Heart
+                                  className={`w-4 h-4 ${image.isLiked ? 'text-red-400 fill-red-400' : 'text-white'}`}
+                                />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleShareImage(image);
                                 }}
                                 className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg transition-colors"
                                 aria-label="Share image"

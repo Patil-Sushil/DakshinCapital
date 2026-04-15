@@ -56,8 +56,11 @@ const InterestComparison = () => {
       ? comparisons.reduce((min, curr) => (curr.totalPayment < min.totalPayment ? curr : min))
       : null;
 
+  const inputBaseClass =
+    'w-full rounded-xl border border-light-border dark:border-blue-800/60 bg-white dark:bg-slate-900/70 px-4 py-3 text-light-text dark:text-slate-100 placeholder:text-light-textMuted dark:placeholder:text-slate-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-light-primary dark:focus:ring-blue-500 focus:border-light-primary dark:focus:border-blue-500';
+
   return (
-    <Card>
+    <Card className="border border-light-border dark:border-blue-900/40 bg-light-card dark:bg-slate-950/60 shadow-lg shadow-blue-900/5">
       <div className="flex items-center space-x-3 mb-6">
         <div className="w-12 h-12 bg-purple-600/10 rounded-xl flex items-center justify-center">
           <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
@@ -69,8 +72,8 @@ const InterestComparison = () => {
 
       <div className="space-y-6">
         {/* Loan Parameters */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35">
             <label className="text-sm font-medium text-light-text dark:text-dark-text mb-2 block">
               Loan Amount
             </label>
@@ -78,13 +81,13 @@ const InterestComparison = () => {
               type="number"
               value={loanAmount}
               onChange={(e) => setLoanAmount(Number(e.target.value))}
-              className="input-field"
+              className={inputBaseClass}
               min="100000"
               max="10000000"
               step="100000"
             />
           </div>
-          <div>
+          <div className="p-4 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35">
             <label className="text-sm font-medium text-light-text dark:text-dark-text mb-2 block">
               Tenure (Years)
             </label>
@@ -92,7 +95,7 @@ const InterestComparison = () => {
               type="number"
               value={loanTenure}
               onChange={(e) => setLoanTenure(Number(e.target.value))}
-              className="input-field"
+              className={inputBaseClass}
               min="1"
               max="30"
             />
@@ -124,13 +127,13 @@ const InterestComparison = () => {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 p-3 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35"
               >
                 <input
                   type="text"
                   value={rateInfo.name}
                   onChange={(e) => updateName(rateInfo.id, e.target.value)}
-                  className="input-field flex-1"
+                  className={`${inputBaseClass} flex-1`}
                   placeholder="Bank Name"
                 />
                 <div className="relative flex-1">
@@ -138,12 +141,12 @@ const InterestComparison = () => {
                     type="number"
                     value={rateInfo.rate}
                     onChange={(e) => updateRate(rateInfo.id, Number(e.target.value))}
-                    className="input-field w-full pr-8"
+                    className={`${inputBaseClass} w-full pr-10`}
                     min="5"
                     max="20"
                     step="0.1"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-light-textSecondary dark:text-dark-textSecondary">
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-light-textSecondary dark:text-slate-400 font-semibold">
                     %
                   </span>
                 </div>
@@ -171,10 +174,10 @@ const InterestComparison = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className={`p-4 rounded-lg border-2 transition-all ${
+              className={`p-4 rounded-xl border transition-all ${
                 bestRate && comp.id === bestRate.id
-                  ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                  : 'border-light-border dark:border-dark-border bg-light-surface dark:bg-dark-surface'
+                  ? 'border-green-500/70 bg-green-50 dark:bg-green-900/20'
+                  : 'border-light-border dark:border-blue-900/40 bg-light-surface dark:bg-slate-900/45'
               }`}
             >
               <div className="flex items-center justify-between mb-3">

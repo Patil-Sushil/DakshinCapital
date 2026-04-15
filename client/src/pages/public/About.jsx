@@ -34,7 +34,7 @@ const About = () => {
   const timeline = [
     {
       year: '2008',
-      event: 'Founded FinancePro',
+      event: 'Founded Dakshin Capital',
       description: 'Started with a vision to democratize financial services',
     },
     {
@@ -67,7 +67,7 @@ const About = () => {
   return (
     <div className="pt-20">
       <PageHeader
-        title="About FinancePro"
+        title="About Dakshin Capital"
         subtitle="Your trusted partner in achieving financial freedom since 2008"
         breadcrumbs={[{ label: 'About Us' }]}
       />
@@ -87,9 +87,9 @@ const About = () => {
               </h2>
               <div className="space-y-4 text-light-textSecondary dark:text-dark-textSecondary leading-relaxed">
                 <p>
-                  Founded in 2008, FinancePro has been at the forefront of providing accessible and
-                  transparent financial services to individuals and businesses across India. What
-                  started as a small initiative has grown into a trusted name in the financial
+                  Founded in 2008, Dakshin Capital has been at the forefront of providing accessible
+                  and transparent financial services to individuals and businesses across India.
+                  What started as a small initiative has grown into a trusted name in the financial
                   sector.
                 </p>
                 <p>

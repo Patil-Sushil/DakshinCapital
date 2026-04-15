@@ -27,7 +27,7 @@ const LoanEligibility = () => {
   const eligibilityPercentage = ((monthlyIncome - existingEMI) / monthlyIncome) * 100;
 
   return (
-    <Card>
+    <Card className="border border-light-border dark:border-blue-900/40 bg-light-card dark:bg-slate-950/60 shadow-lg shadow-blue-900/5">
       <div className="flex items-center space-x-3 mb-6">
         <div className="w-12 h-12 bg-green-600/10 rounded-xl flex items-center justify-center">
           <TrendingUp className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -39,7 +39,7 @@ const LoanEligibility = () => {
 
       <div className="space-y-6">
         {/* Monthly Income */}
-        <div>
+        <div className="p-4 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-medium text-light-text dark:text-dark-text flex items-center space-x-2">
               <DollarSign className="w-4 h-4" />
@@ -65,7 +65,7 @@ const LoanEligibility = () => {
         </div>
 
         {/* Existing EMI */}
-        <div>
+        <div className="p-4 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-medium text-light-text dark:text-dark-text">
               Existing EMI (if any)
@@ -90,7 +90,7 @@ const LoanEligibility = () => {
         </div>
 
         {/* Interest Rate */}
-        <div>
+        <div className="p-4 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-medium text-light-text dark:text-dark-text flex items-center space-x-2">
               <Percent className="w-4 h-4" />
@@ -116,7 +116,7 @@ const LoanEligibility = () => {
         </div>
 
         {/* Loan Tenure */}
-        <div>
+        <div className="p-4 rounded-xl bg-light-surface/70 dark:bg-slate-900/45 border border-light-border dark:border-blue-900/35">
           <div className="flex items-center justify-between mb-3">
             <label className="text-sm font-medium text-light-text dark:text-dark-text flex items-center space-x-2">
               <Calendar className="w-4 h-4" />

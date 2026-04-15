@@ -48,7 +48,7 @@ const WhyChooseUs = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-light-text dark:text-dark-text mb-6">
-              Why Thousands Choose FinancePro
+              Why Thousands Choose Dakshin Capital
             </h2>
             <p className="text-lg text-light-textSecondary dark:text-dark-textSecondary mb-8 leading-relaxed">
               We're committed to providing the best financial solutions with customer satisfaction

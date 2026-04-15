@@ -64,7 +64,7 @@ const FeaturesSection = () => {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-heading font-bold text-light-text dark:text-dark-text mb-4">
-            Why Choose FinancePro?
+            Why Choose Dakshin Capital?
           </h2>
           <p className="text-lg text-light-textSecondary dark:text-dark-textSecondary">
             We provide comprehensive financial solutions with customer-first approach and
