@@ -47,7 +47,7 @@ const Footer = () => {
     {
       name: 'Instagram',
       icon: Instagram,
-      url: 'https://instagram.com',
+      url: 'https://www.instagram.com/dakshin_capital',
       color: 'hover:text-pink-600',
     },
     { name: 'YouTube', icon: Youtube, url: 'https://youtube.com', color: 'hover:text-red-600' },

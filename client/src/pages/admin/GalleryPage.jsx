@@ -96,17 +96,28 @@ const GalleryPage = () => {
     if (!confirmed) return;
 
     try {
-      await deleteGalleryImageById(image.id, image.imageUrl);
+      const result = await deleteGalleryImageById(image.id, image.imageUrl);
+
+      // Update UI immediately to prevent DOM errors
       setImages((prev) => prev.filter((img) => img.id !== image.id));
-      toastActions.imageDeleted();
+
+      // Show appropriate message based on result
+      if (result.storageDeleted) {
+        toastActions.imageDeleted();
+      } else {
+        showSuccess(
+          'Image removed from gallery. Note: File remains in storage - please update Firebase Storage rules for complete deletion.'
+        );
+      }
     } catch (error) {
       console.error('Delete error:', error);
-      if (error.message && error.message.includes('Firebase Storage rules')) {
+      // Don't update UI if deletion completely failed
+      if (error.code === 'storage/unauthorized' || error.message?.includes('Firebase Storage')) {
         showError(
-          'Permission denied. Please update Firebase Storage rules to allow deletion. Check FIREBASE_STORAGE_RULES_SETUP.md for instructions.'
+          'Permission denied. Please update Firebase Storage rules. Check ACTION_REQUIRED_FIREBASE_RULES.md'
         );
       } else {
-        showError('Failed to delete image. Please check Firebase Storage permissions.');
+        showError('Failed to delete image. Please try again.');
       }
     }
   };
@@ -125,12 +136,23 @@ const GalleryPage = () => {
 
     try {
       const imagesToDelete = images.filter((img) => selectedImages.includes(img.id));
-      await bulkDeleteImages(imagesToDelete);
+      const result = await bulkDeleteImages(imagesToDelete);
+
+      // Update UI immediately
       setImages((prev) => prev.filter((img) => !selectedImages.includes(img.id)));
       setSelectedImages([]);
-      toastActions.deleted();
+
+      // Show appropriate message
+      if (result.storageFailed > 0) {
+        showSuccess(
+          `${result.total} images removed from gallery. Note: ${result.storageFailed} files remain in storage - please update Firebase Storage rules.`
+        );
+      } else {
+        toastActions.deleted();
+      }
     } catch (error) {
-      showError('Failed to delete images');
+      console.error('Bulk delete error:', error);
+      showError('Failed to delete images. Please try again.');
     }
   };
 

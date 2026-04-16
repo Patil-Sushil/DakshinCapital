@@ -119,6 +119,7 @@ export const deleteGalleryImageById = async (id, imageUrl) => {
     await deleteGalleryImage(imageUrl);
     // Then delete from Firestore
     await deleteDoc(doc(db, 'gallery', id));
+    return { success: true, storageDeleted: true };
   } catch (error) {
     console.error('Error deleting gallery image:', error);
 
@@ -127,12 +128,16 @@ export const deleteGalleryImageById = async (id, imageUrl) => {
       console.warn('Storage deletion failed due to permissions, deleting Firestore record only');
       try {
         await deleteDoc(doc(db, 'gallery', id));
-        // Throw a custom error with helpful message
-        throw new Error(
-          'Image record deleted, but file remains in storage. Please update Firebase Storage rules to allow deletion.'
-        );
+        // Return partial success
+        return {
+          success: true,
+          storageDeleted: false,
+          message:
+            'Image removed from gallery, but file remains in storage. Please update Firebase Storage rules.',
+        };
       } catch (firestoreError) {
-        throw new Error('Failed to delete image. Please check Firebase Storage rules.');
+        console.error('Firestore deletion also failed:', firestoreError);
+        throw new Error('Failed to delete image. Please check Firebase permissions.');
       }
     }
     throw error;
@@ -145,14 +150,36 @@ export const deleteGalleryImageById = async (id, imageUrl) => {
 export const bulkDeleteImages = async (images) => {
   try {
     const batch = writeBatch(db);
+    let storageDeletedCount = 0;
+    let storageFailedCount = 0;
 
+    // Try to delete from storage (don't block on failures)
+    await Promise.allSettled(
+      images.map(async (image) => {
+        try {
+          await deleteGalleryImage(image.imageUrl);
+          storageDeletedCount++;
+        } catch (error) {
+          console.warn(`Storage deletion failed for ${image.id}:`, error.code);
+          storageFailedCount++;
+        }
+      })
+    );
+
+    // Delete from Firestore
     images.forEach((image) => {
       const docRef = doc(db, 'gallery', image.id);
       batch.delete(docRef);
-      deleteGalleryImage(image.imageUrl).catch(() => {});
     });
 
     await batch.commit();
+
+    return {
+      success: true,
+      total: images.length,
+      storageDeleted: storageDeletedCount,
+      storageFailed: storageFailedCount,
+    };
   } catch (error) {
     console.error('Error bulk deleting images:', error);
     throw error;
